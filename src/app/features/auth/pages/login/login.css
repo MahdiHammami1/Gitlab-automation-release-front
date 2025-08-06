@@ -1,0 +1,246 @@
+/* GitLab Color Palette */
+:root {
+  --gitlab-orange: #FC6D26;
+  --gitlab-orange-hover: #E85D1C;
+  --gitlab-orange-light: #FDF2ED;
+  --gitlab-blue: #1F75CB;
+  --gitlab-blue-dark: #0F4C81;
+  --gitlab-gray-50: #F9F9F9;
+  --gitlab-gray-100: #F0F0F0;
+  --gitlab-gray-200: #E1E1E1;
+  --gitlab-gray-300: #CCCCCC;
+  --gitlab-gray-400: #ADADAD;
+  --gitlab-gray-500: #8F8F8F;
+  --gitlab-gray-600: #666666;
+  --gitlab-gray-700: #4A4A4A;
+  --gitlab-gray-800: #2E2E2E;
+  --gitlab-gray-900: #1A1A1A;
+  --gitlab-red: #DD2B0E;
+  --gitlab-green: #108548;
+}
+/* Reset de base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body, html {
+  height: 100%;
+  background: linear-gradient(135deg, #f6f8fa, #eef1f6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Conteneur principal */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Carte */
+.auth-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  max-width: 420px;
+  width: 100%;
+}
+
+/* Header */
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.gitlab-logo {
+  margin-bottom: 1rem;
+}
+
+.auth-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.auth-subtitle {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* Formulaire */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: #444;
+  width: max-content;
+}
+
+.form-input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border 0.3s;
+  width: 340px;
+}
+
+.form-input:focus {
+  border-color: #0066cc;
+  outline: none;
+}
+
+.form-input.error {
+  border-color: #e74c3c;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+/* Password container */
+.password-input-container {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #888;
+}
+
+.password-toggle svg {
+  stroke: #666;
+}
+
+/* Options */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox {
+  accent-color: #0066cc;
+}
+
+.forgot-password-link {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: 500;
+}
+.forgot-password-link:hover {
+  text-decoration: underline;
+}
+
+/* Submit */
+.submit-button {
+  background-color: #0066cc;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.submit-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #005bb5;
+}
+
+.loading-spinner svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 2rem 0;
+  color: #999;
+  font-size: 0.85rem;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #ccc;
+  margin: 0 0.75rem;
+}
+
+/* OAuth Button */
+.oauth-button {
+  background-color: #fc6d26;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 340px;
+  
+}
+
+.oauth-button:hover {
+  background-color: #e85d1f;
+}
+
+.oauth-icon {
+  stroke: white;
+}
