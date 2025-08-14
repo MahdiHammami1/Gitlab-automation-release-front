@@ -1,1 +1,129 @@
-<p>dashboard works!</p>
+<div class="page">
+  <header class="page-header">
+    <div class="title">
+        <img
+        class="brand-icon"
+        src="https://plantscience.psu.edu/research/labs/roots/images/deeper-site/gitlab-logo/@@images/image.jpeg"
+        alt=""
+        />
+            <h1>GitLab Projects</h1>
+    </div>
+    <div class="actions">
+      <button class="btn" (click)="fetch()" title="Refresh">↻ Refresh</button>
+      <div class="view-switch">
+        <button class="tab" [class.active]="view()==='table'" (click)="view.set('table')">Table</button>
+        <button class="tab" [class.active]="view()==='cards'" (click)="view.set('cards')">Cards</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Controls -->
+  <section class="toolbar">
+    <input
+      type="text"
+      placeholder="Search by name or namespace…"
+      [ngModel]="query()"
+      (ngModelChange)="onQueryChange($event)"
+    />
+
+    <select
+      [ngModel]="visibility()"
+      (ngModelChange)="onVisibilityChange($event)">
+      <option value="all">All visibilities</option>
+      <option value="public">Public</option>
+      <option value="internal">Internal</option>
+      <option value="private">Private</option>
+    </select>
+
+    <select
+      [ngModel]="sort()"
+      (ngModelChange)="onSortChange($event)">
+      <option value="activity_desc">Sort: Last activity ↓</option>
+      <option value="name_asc">Sort: Name A→Z</option>
+      <option value="stars_desc">Sort: Stars ↓</option>
+    </select>
+
+    <div class="count" *ngIf="!loading()">{{ filtered().length }} / {{ projects().length }} projects</div>
+  </section>
+
+  <!-- Loading / Error -->
+  <div class="state" *ngIf="loading()">Loading projects…</div>
+  <div class="state error" *ngIf="error()">{{ error() }}</div>
+
+  <!-- Table View -->
+  <section *ngIf="!loading() && !error() && view()==='table'" class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Namespace</th>
+          <th>Visibility</th>
+          <th>Last activity</th>
+          <th>Stars</th>
+          <th>Repo URLs</th>
+          <th>Tags</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of filtered(); trackBy: trackById">
+          <td class="name">
+            <a [href]="p.web_url" target="_blank" rel="noopener">{{ p.name }}</a>
+            <div class="sub">{{ p.path_with_namespace }}</div>
+          </td>
+
+          <td>{{ p.namespace.full_path || '—' }}</td>
+          <td><span class="badge vis-{{p.visibility}}">{{ p.visibility }}</span></td>
+          <td>{{ p.last_activity_at | date:'medium' }}</td>
+          <td>{{ p.star_count }}</td>
+
+          <td class="urls">
+            <div class="url-row">
+              <code class="url">{{ p.http_url_to_repo }}</code>
+              <button class="mini" (click)="onCopy(p.http_url_to_repo)">Copy</button>
+              <span class="copied" *ngIf="recentlyCopied.has(p.http_url_to_repo)">Copied!</span>
+            </div>
+            <div class="url-row">
+              <code class="url">{{ p.ssh_url_to_repo }}</code>
+              <button class="mini" (click)="onCopy(p.ssh_url_to_repo)">Copy</button>
+              <span class="copied" *ngIf="recentlyCopied.has(p.ssh_url_to_repo)">Copied!</span>
+            </div>
+          </td>
+
+          <td class="tags">
+            <ng-container *ngIf="p.topics?.length || p.tag_list?.length; else noTags">
+              <span class="tag" *ngFor="let t of p.topics">{{ t }}</span>
+              <span class="tag" *ngFor="let t of p.tag_list">{{ t }}</span>
+            </ng-container>
+            <ng-template #noTags>—</ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Cards View -->
+  <section *ngIf="!loading() && !error() && view()==='cards'" class="cards">
+    <article class="card" *ngFor="let p of filtered(); trackBy: trackById">
+      <div class="card-head">
+        <h3><a [href]="p.web_url" target="_blank" rel="noopener">{{ p.name }}</a></h3>
+        <span class="badge vis-{{p.visibility}}">{{ p.visibility }}</span>
+      </div>
+      <p class="ns">{{ p.namespace.full_path }}</p>
+      <p class="meta">Last activity: {{ p.last_activity_at | date:'medium' }} • ★ {{ p.star_count }}</p>
+      <div class="urls urls-card">
+        <div class="url-row">
+          <code class="url">{{ p.http_url_to_repo }}</code>
+          <button class="mini" (click)="onCopy(p.http_url_to_repo)">Copy</button>
+        </div>
+        <div class="url-row">
+          <code class="url">{{ p.ssh_url_to_repo }}</code>
+          <button class="mini" (click)="onCopy(p.ssh_url_to_repo)">Copy</button>
+        </div>
+      </div>
+      <div class="tags">
+        <span class="tag" *ngFor="let t of p.topics">{{ t }}</span>
+        <span class="tag" *ngFor="let t of p.tag_list">{{ t }}</span>
+      </div>
+    </article>
+  </section>
+</div>

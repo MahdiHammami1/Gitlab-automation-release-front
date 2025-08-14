@@ -1,0 +1,12 @@
+<app-navbar></app-navbar>
+<div class="layout-container">
+  <button class="sidebar-toggle" (click)="toggleSidebar()">
+    <span *ngIf="sidebarOpen()">❮</span>
+    <span *ngIf="!sidebarOpen()">❯</span>
+  </button>
+  <app-sidebar *ngIf="sidebarOpen()"></app-sidebar>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+<app-footer></app-footer>

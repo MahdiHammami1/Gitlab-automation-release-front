@@ -1,0 +1,32 @@
+<nav class="gl-nav">
+  <!-- Left (brand) -->
+  <div class="left">
+    
+    
+  </div>
+
+  <!-- Center (search) -->
+  <div class="center">
+    <input class="search" type="search" placeholder="Search projects, groups, issues…" />
+  </div>
+
+  <!-- Right (actions + user) -->
+  <div class="right">
+    <button class="btn small" title="Create">Create</button>
+
+    <a class="icon" routerLink="/projects" title="Projects" aria-label="Projects">★</a>
+
+    <div class="user" *ngIf="!loading()">
+      <img *ngIf="me()?.avatar_url" class="avatar" [src]="me()?.avatar_url" alt="" />
+      <div *ngIf="!me()?.avatar_url" class="avatar avatar-fallback">{{ initials() }}</div>
+      <span class="u-name">{{ me()?.name || me()?.username }}</span>
+    </div>
+
+    <div class="user skeleton" *ngIf="loading()">
+      <div class="avatar shimmer"></div>
+      <span class="u-name shimmer">Loading…</span>
+    </div>
+  </div>
+</nav>
+
+<div class="api-error" *ngIf="error()">{{ error() }}</div>

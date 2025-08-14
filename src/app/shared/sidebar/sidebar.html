@@ -1,0 +1,16 @@
+<aside class="gl-sidebar">
+  <div class="sidebar-user">
+    <img *ngIf="user().avatar_url" [src]="user().avatar_url" class="avatar" alt="User avatar" />
+    <div *ngIf="!user().avatar_url" class="avatar avatar-fallback">{{ user().name.charAt(0) }}</div>
+    <div class="user-info">
+      <div class="user-name">{{ user().name }}</div>
+      <div class="user-email">{{ user().email }}</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <a routerLink="/dashboard" routerLinkActive="active">
+      <span class="icon"></span>
+      Dashboard
+    </a>
+  </nav>
+</aside>

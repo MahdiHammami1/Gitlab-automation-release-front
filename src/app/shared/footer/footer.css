@@ -1,0 +1,28 @@
+/* GitLab-like footer */
+:host { display: block; }
+.gl-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 32px;
+  background: #f8f7fa;
+  border-top: 1px solid #e6e3ee;
+  color: #6b667c;
+  font-size: 15px;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+.gl-footer a {
+  color: #554488;
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 12px;
+  transition: color 0.2s;
+}
+.gl-footer a:hover {
+  color: #fc6d26;
+  text-decoration: underline;
+}
+.gl-footer span {
+  font-weight: 500;
+}
