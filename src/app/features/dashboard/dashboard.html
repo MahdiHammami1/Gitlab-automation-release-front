@@ -6,13 +6,14 @@
         src="https://plantscience.psu.edu/research/labs/roots/images/deeper-site/gitlab-logo/@@images/image.jpeg"
         alt=""
         />
-            <h1>GitLab Projects</h1>
+            <h1>Projets GitLab</h1>
     </div>
     <div class="actions">
-      <button class="btn" (click)="fetch()" title="Refresh">↻ Refresh</button>
+      <button class="btn" (click)="fetch()" title="Rafraîchir">↻ Rafraîchir</button>
+      <a class="btn" style="margin-left: 12px;" [routerLink]="['/create-release']">Créer un release</a>
       <div class="view-switch">
-        <button class="tab" [class.active]="view()==='table'" (click)="view.set('table')">Table</button>
-        <button class="tab" [class.active]="view()==='cards'" (click)="view.set('cards')">Cards</button>
+        <button class="tab" [class.active]="view()==='table'" (click)="view.set('table')">Tableau</button>
+        <button class="tab" [class.active]="view()==='cards'" (click)="view.set('cards')">Cartes</button>
       </div>
     </div>
   </header>
@@ -58,21 +59,22 @@
           <th>Name</th>
           <th>Namespace</th>
           <th>Visibility</th>
+          <th>Last tag</th>
           <th>Last activity</th>
           <th>Stars</th>
           <th>Repo URLs</th>
-          <th>Tags</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let p of filtered(); trackBy: trackById">
           <td class="name">
-            <a [href]="p.web_url" target="_blank" rel="noopener">{{ p.name }}</a>
+            <a [routerLink]="['/projects', p.id]">{{ p.name }}</a>
             <div class="sub">{{ p.path_with_namespace }}</div>
           </td>
 
           <td>{{ p.namespace.full_path || '—' }}</td>
           <td><span class="badge vis-{{p.visibility}}">{{ p.visibility }}</span></td>
+          <td>{{ (lastTags()[p.id] || '—') }}</td>
           <td>{{ p.last_activity_at | date:'medium' }}</td>
           <td>{{ p.star_count }}</td>
 
@@ -89,13 +91,6 @@
             </div>
           </td>
 
-          <td class="tags">
-            <ng-container *ngIf="p.topics?.length || p.tag_list?.length; else noTags">
-              <span class="tag" *ngFor="let t of p.topics">{{ t }}</span>
-              <span class="tag" *ngFor="let t of p.tag_list">{{ t }}</span>
-            </ng-container>
-            <ng-template #noTags>—</ng-template>
-          </td>
         </tr>
       </tbody>
     </table>
@@ -105,11 +100,11 @@
   <section *ngIf="!loading() && !error() && view()==='cards'" class="cards">
     <article class="card" *ngFor="let p of filtered(); trackBy: trackById">
       <div class="card-head">
-        <h3><a [href]="p.web_url" target="_blank" rel="noopener">{{ p.name }}</a></h3>
+        <h3><a [routerLink]="['/projects', p.id]">{{ p.name }}</a></h3>
         <span class="badge vis-{{p.visibility}}">{{ p.visibility }}</span>
       </div>
       <p class="ns">{{ p.namespace.full_path }}</p>
-      <p class="meta">Last activity: {{ p.last_activity_at | date:'medium' }} • ★ {{ p.star_count }}</p>
+      <p class="meta">Last activity: {{ p.last_activity_at | date:'medium' }} • ★ {{ p.star_count }} • Tag: {{ (lastTags()[p.id] || '—') }}</p>
       <div class="urls urls-card">
         <div class="url-row">
           <code class="url">{{ p.http_url_to_repo }}</code>
@@ -119,10 +114,6 @@
           <code class="url">{{ p.ssh_url_to_repo }}</code>
           <button class="mini" (click)="onCopy(p.ssh_url_to_repo)">Copy</button>
         </div>
-      </div>
-      <div class="tags">
-        <span class="tag" *ngFor="let t of p.topics">{{ t }}</span>
-        <span class="tag" *ngFor="let t of p.tag_list">{{ t }}</span>
       </div>
     </article>
   </section>

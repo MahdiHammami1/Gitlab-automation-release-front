@@ -81,7 +81,37 @@ export class GitlabService {
       headers,
       withCredentials: true,
     });
+   }
 
+   // Fetch repository tags for a given project. By default returns only the most recent tag (per_page=1).
+    getTags(projectId: string | number, per_page: number = 1): Observable<any[]> {
+    return this.http
+        .get<any[]>(`${this.baseUrl}/gitlab/projects/${projectId}/repository/tags?per_page=${per_page}`)
+        .pipe(
+        catchError((err) => {
+            console.error('Failed to load tags for project', projectId, err);
+            return throwError(() => new Error('Unable to load tags'));
+        })
+        );
+    }
 
-}
+      /** Vérifie ou crée un module depuis GitLab */
+  createModuleFromGitlab(repoUrl: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/modules/from-gitlab`, { repoUrl });
+  }
+
+  /** Vérifie ou crée un tag depuis GitLab */
+  createTagFromGitlab(repoUrl: string, tagName: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/tags/from-gitlab`, { repoUrl, tagName });
+  }
+
+  /** Crée un moduleRelease */
+  createModuleRelease(data: { moduleId: string, tagId: string, releaseId?: string }): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/module-releases`, data);
+  }
+
+  /** Crée le release global */
+  createRelease(data: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/releases`, data);
+  }
 }

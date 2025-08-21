@@ -1,3 +1,31 @@
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  padding: 2px 10px 2px 2px;
+  border-radius: 8px;
+  transition: background 0.18s, box-shadow 0.18s;
+}
+.brand:hover {
+  background: #f3f1f8;
+  box-shadow: 0 2px 8px rgba(85,68,136,0.06);
+}
+.brand-name {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #554488;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 0 #fff, 0 0 2px #ece9f3;
+  transition: color 0.18s;
+  text-decoration: none;
+}
+.brand:active, .brand:focus, .brand.no-underline:active, .brand.no-underline:focus {
+  text-decoration: none;
+}
+.brand:hover .brand-name {
+  color: #fc6d26;
+}
 /* GitLab-like top bar */
 :host { display:block; }
  .gl-nav {

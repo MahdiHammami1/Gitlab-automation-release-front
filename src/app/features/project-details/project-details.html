@@ -1,0 +1,30 @@
+<div class="project-header" *ngIf="project()">
+  <img [src]="project().avatar_url" class="project-logo" *ngIf="project().avatar_url">
+  <div class="project-info">
+    <h2>{{ project().name_with_namespace }}</h2>
+    <div>ID du projet : {{ project().id }} | Visibilité : {{ project().visibility }}</div>
+    <div>Branche par défaut : {{ project().default_branch }}</div>
+    <div>Dernière activité : {{ project().last_activity_at | date:'yyyy-MM-dd' }}</div>
+    <a [href]="project().web_url" target="_blank">Voir sur GitLab</a>
+  </div>
+</div>
+
+<div class="project-sections">
+  <section>
+    <h3>Branches</h3>
+    <ul>
+      <li *ngFor="let branch of branches()">
+        • {{ branch.name }} ({{ branch.commit?.title || 'dernier commit...'}})
+      </li>
+    </ul>
+  </section>
+  <section>
+    <h3>Tags</h3>
+    <ul>
+      <li *ngFor="let tag of tags()">
+        • {{ tag.name }} (commit du {{ tag.commit?.committed_date | date:'dd/MM/yyyy' }})
+      </li>
+    </ul>
+  </section>
+  <!-- Sections Releases, Pipelines et Actions rapides supprimées -->
+</div>

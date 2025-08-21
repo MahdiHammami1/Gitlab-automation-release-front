@@ -1,27 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
 /* attach tokens to the component tree instead of the doc root */
-.page {
-  --gl-orange-500: #fc6d26;
-  --gl-orange-400: #fca326;
-  --gl-red-500:    #e24329;
-  --gl-purple-500: #554488;
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+:root {
+  /* Palette principale (GitLab violet, cohérent avec le front actuel) */
+  --primary-color: #7a5af5;
+  --primary-dark: #5c3cc5;
+  --secondary-color: #f5f7fb;
+  --bg-color: #fff;
+  --text-color: #333;
+  --text-light: #666;
+  --border-color: #e0e0e0;
+  --border-radius: 12px;
+  --transition-speed: 0.3s;
+  --shadow-light: 0 4px 8px rgba(0,0,0,0.05);
+  --shadow-heavy: 0 6px 16px rgba(0,0,0,0.15);
 
-  --gl-charcoal:   #171321;
-  --gl-text:       #1f1b2d;
-  --gl-muted:      #6b667c;
-  --gl-border:     #e6e3ee;
-  --gl-bg:         #ffffff;
-  --gl-bg-subtle:  #f7f6fb;
+  /* Fontes et tailles */
+  --font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  --fs-0: 12px;
+  --fs-1: 14px;
+  --fs-2: 16px;
+  --fs-3: 18px;
+  --fs-4: 20px;
 
-  --gl-success: #1aaa55;
-  --gl-info:    #2f8fff;
-  --gl-warning: #fca326;
-  --gl-danger:  #e24329;
-
-  --gl-radius:   12px;
-  --gl-radius-sm: 8px;
-  --gl-shadow-1: 0 1px 2px rgba(23,19,33,0.04), 0 6px 24px rgba(23,19,33,0.06);
-
+  /* Spacing */
   --sp-0: 0;
   --sp-1: 4px;
   --sp-2: 8px;
@@ -31,11 +33,59 @@
   --sp-6: 24px;
   --sp-7: 32px;
   --sp-8: 40px;
+}
 
-  --gl-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-  --fs-0: 12px;
-  --fs-1: 14px;
-  --fs-2: 16px;
-  --fs-3: 18px;
-  --fs-4: 20px;
+
+
+:root {
+  /* Colors */
+  --primary-color: #7a5af5;
+  --primary-dark: #5c3cc5;
+  --primary-light: rgba(122, 90, 245, 0.1);
+  --secondary-color: #f8fafc;
+  --success-color: #4caf50;
+  --text-color: #2d3748;
+  --text-muted: #555;
+  --text-light: #444;
+  --border-color: #e2e8f0;
+  --border-hover: var(--primary-color);
+  --background-white: #ffffff;
+  --background-light: #fafafa;
+  --background-hover: #fdfbff;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Typography */
+  --font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.1rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --line-height-base: 1.6;
+  --line-height-relaxed: 1.7;
+
+  /* Layout */
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  --max-width-container: 950px;
+  --max-width-editor: 600px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
 }

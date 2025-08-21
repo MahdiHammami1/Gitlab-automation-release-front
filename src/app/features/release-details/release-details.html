@@ -1,0 +1,29 @@
+<div class="release-details-container">
+  <h2>Détail du release</h2>
+  <div *ngIf="loading()" class="loading">Chargement…</div>
+  <div *ngIf="error()" class="error">{{ error() }}</div>
+  <div *ngIf="!loading() && !error() && release()">
+    <div class="release-title">Titre : {{ release().name }}</div>
+    <div class="release-author">Auteur : {{ release().author || '—' }}</div>
+    <div class="release-date">Date : {{ release().createdAt | date:'dd/MM/yyyy HH:mm' }}</div>
+    <div class="release-changelog">
+      <span>Changelog :</span>
+      <div class="changelog-content" [innerHTML]="release().changelogGlobal || release().description || '—'"></div>
+    </div>
+
+    <div class="release-assets">
+      <span>Assets :</span>
+      <ul *ngIf="release().moduleReleases?.length">
+        <li *ngFor="let modRel of release().moduleReleases">
+          <span class="repo-name">{{ getRepoName(modRel) }}</span> :
+          <a [href]="getDownloadUrl(modRel)" target="_blank">
+            {{ modRel.tag?.name || 'Télécharger' }} (zip)
+          </a>
+        </li>
+      </ul>
+      <div *ngIf="!release().moduleReleases?.length" class="empty">Aucun asset disponible.</div>
+    </div>
+    <!-- Ajoutez ici d'autres champs si besoin -->
+  </div>
+  <div *ngIf="!loading() && !error() && !release()" class="empty">Aucun release trouvé.</div>
+</div>

@@ -1,0 +1,629 @@
+/* ============================== 
+   CSS CUSTOM PROPERTIES (VARIABLES)
+   ============================== */
+
+/* ============================== 
+   RESET & BASE STYLES
+   ============================== */
+
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  line-height: var(--line-height-base);
+  font-size: var(--font-size-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Added scroll behavior */
+  scroll-behavior: smooth;
+}
+
+/* ============================== 
+   MAIN CONTAINER
+   ============================== */
+.create-release-container {
+  background: var(--background-white);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  max-width: var(--max-width-container);
+  /* Using logical properties for better RTL support */
+  margin-block: var(--spacing-xl);
+  margin-inline: auto;
+  transition: box-shadow var(--transition-base);
+
+  /* Modern container query support */
+  container-type: inline-size;
+  container-name: release-container;
+}
+
+.create-release-container:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* Container queries for responsive design */
+@container release-container (max-width: 600px) {
+  .create-release-container {
+    margin-inline: var(--spacing-md);
+    padding: var(--spacing-lg);
+  }
+}
+
+/* ============================== 
+   FORMS
+   ============================== */
+.create-release-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Enhanced form field improvements */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  position: relative;
+}
+
+.form-label {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color);
+  font-size: var(--font-size-base);
+}
+
+/* Form validation states */
+.form-field.error .form-label {
+  color: var(--error-color);
+}
+
+.form-field.success .form-label {
+  color: var(--success-color);
+}
+
+.form-error-message {
+  color: var(--error-color);
+  font-size: var(--font-size-sm);
+  margin-block-start: var(--spacing-xs);
+}
+
+/* ============================== 
+   REPOSITORY LIST
+   ============================== */
+.repo-list {
+  display: grid;
+  gap: var(--spacing-lg);
+  /* Enhanced grid with auto-fit for better responsiveness */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@container release-container (max-width: 700px) {
+  .repo-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.repo-select-block {
+  background: var(--background-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  transition: all var(--transition-base);
+  cursor: pointer;
+  /* Added performance optimization */
+  will-change: var(--will-change-transform);
+
+  /* Focus styles for accessibility */
+  &:focus-within {
+    outline: 2px solid var(--primary-color);
+    outline-offset: var(--focus-ring-offset);
+    box-shadow: var(--focus-ring);
+  }
+}
+
+.repo-select-block:hover {
+  border-color: var(--border-hover);
+  background: var(--background-hover);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.repo-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-block-end: var(--spacing-sm);
+  color: var(--text-color);
+  /* Added text overflow handling */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.repo-checkbox {
+  margin-block-end: var(--spacing-md);
+  accent-color: var(--primary-color);
+  /* Enhanced checkbox styling */
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.tag-select mat-form-field {
+  width: 100%;
+}
+
+/* ============================== 
+   BUTTONS
+   ============================== */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  /* Added logical properties */
+  margin-block-start: var(--spacing-lg);
+}
+
+button.mat-raised-button {
+  background: var(--primary-color);
+  color: var(--background-white);
+  font-weight: var(--font-weight-semibold);
+  padding-block: 0.75rem;
+  padding-inline: 1.5rem;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+  /* Added performance optimization */
+  will-change: var(--will-change-transform);
+  position: relative;
+  overflow: hidden;
+
+  /* Focus styles for accessibility */
+  &:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: var(--focus-ring-offset);
+    box-shadow: var(--focus-ring), var(--shadow-sm);
+  }
+
+  /* Added ripple effect */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+  }
+
+  &:active::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  /* Disabled state */
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    will-change: var(--will-change-auto);
+  }
+}
+
+button.mat-raised-button:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+button.mat-raised-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Secondary button variant */
+.mat-stroked-button {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+
+  &:hover:not(:disabled) {
+    background: var(--primary-light);
+    transform: translateY(-1px);
+  }
+}
+
+/* ============================== 
+   QUILL EDITOR
+   ============================== */
+.quill-label-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-block-end: var(--spacing-sm);
+}
+
+.quill-label {
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: inherit;
+  text-align: center;
+  margin-bottom: 16px;
+  letter-spacing: 0.01em;
+  background: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+}
+
+.quill-block-centered {
+  display: flex;
+  justify-content: center;
+  /* Added container for better responsive behavior */
+  container-type: inline-size;
+  container-name: quill-container;
+}
+
+.quill-block-centered .quill-editor {
+  width: var(--max-width-editor);
+  max-width: 100%;
+}
+
+@container quill-container (max-width: 500px) {
+  .quill-block-centered .quill-editor {
+    width: 100%;
+  }
+}
+
+/* Toolbar styling */
+.ql-toolbar.ql-snow {
+  border: none;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  background: var(--background-light);
+  padding: var(--spacing-sm);
+  box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid var(--border-color);
+  /* Added sticky positioning for better UX */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.ql-toolbar button,
+.ql-toolbar .ql-picker-label {
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  border-radius: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  transition: all var(--transition-fast);
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 1px;
+  }
+}
+
+.ql-toolbar button:hover,
+.ql-toolbar .ql-picker-label:hover {
+  background: #ececec;
+  color: var(--primary-color);
+}
+
+.ql-toolbar .ql-active {
+  background: var(--primary-color) !important;
+  color: var(--background-white) !important;
+}
+
+/* Editor container */
+.ql-container.ql-snow {
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  min-height: 200px;
+  font-size: var(--font-size-base);
+  background: var(--background-white);
+  /* Added smooth scrolling */
+  scroll-behavior: smooth;
+
+  &:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: var(--focus-ring);
+  }
+}
+
+.ql-editor {
+  padding: 0.75rem var(--spacing-md);
+  white-space: pre-wrap;
+  line-height: var(--line-height-relaxed);
+  /* Added better text rendering */
+  text-rendering: optimizeLegibility;
+}
+
+/* Preview section */
+.quill-preview {
+  margin-top: var(--spacing-lg);
+  background: var(--background-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md) 1.2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.quill-content {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: #333;
+  min-height: 100px;
+  white-space: pre-wrap;
+}
+
+/* ============================== 
+   STEPPER COMPONENT
+   ============================== */
+::ng-deep .mat-horizontal-stepper-header-container {
+  background: var(--background-white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 0.8rem;
+  margin-block-end: var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  /* Added sticky positioning for better navigation */
+  position: sticky;
+  top: var(--spacing-md);
+  z-index: 5;
+}
+
+::ng-deep .mat-step-header {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-inline: var(--spacing-xs);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-slow);
+  will-change: var(--will-change-transform);
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: var(--focus-ring-offset);
+    box-shadow: var(--focus-ring);
+  }
+}
+
+::ng-deep .mat-step-header:hover {
+  background: var(--primary-light);
+  transform: translateY(-2px);
+}
+
+::ng-deep .mat-step-icon {
+  background-color: var(--primary-color) !important;
+  color: var(--background-white) !important;
+  font-weight: var(--font-weight-bold);
+  transition: all var(--transition-base);
+  /* Added pulse animation for active state */
+  will-change: var(--will-change-transform);
+}
+
+::ng-deep .mat-step-icon-state-done {
+  background-color: var(--success-color) !important;
+}
+
+::ng-deep .mat-step-header.mat-active .mat-step-icon {
+  background-color: var(--primary-dark) !important;
+  transform: scale(1.15);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+::ng-deep .mat-step-label {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  color: var(--text-light);
+  transition: color var(--transition-base);
+}
+
+::ng-deep .mat-step-header.mat-active .mat-step-label {
+  color: var(--primary-color) !important;
+}
+
+::ng-deep .mat-step-header.mat-completed .mat-step-label {
+  color: var(--success-color) !important;
+}
+
+::ng-deep .mat-stepper-horizontal-line {
+  border-top: 2px dashed #ddd;
+  transition: border-color var(--transition-base);
+}
+
+/* ============================== 
+   RESPONSIVE DESIGN
+   ============================== */
+@media (max-width: 768px) {
+  .create-release-container {
+    margin-inline: var(--spacing-md);
+    padding: var(--spacing-lg);
+  }
+
+  .actions {
+    justify-content: stretch;
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+
+  /* Enhanced mobile stepper */
+  ::ng-deep .mat-horizontal-stepper-header-container {
+    position: static;
+    margin-block-end: var(--spacing-md);
+  }
+}
+
+@media (max-width: 600px) {
+  ::ng-deep .mat-horizontal-stepper-header-container {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  ::ng-deep .mat-stepper-horizontal-line {
+    display: none;
+  }
+
+  ::ng-deep .mat-step-header {
+    margin-inline: 0;
+    justify-content: center;
+  }
+}
+
+/* ============================== 
+   ACCESSIBILITY IMPROVEMENTS
+   ============================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Disable will-change for reduced motion */
+  * {
+    will-change: var(--will-change-auto) !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000;
+    --text-color: #000;
+    --background-white: #fff;
+    --shadow-sm: 0 0 0 1px #000;
+    --shadow-md: 0 0 0 2px #000;
+    --shadow-lg: 0 0 0 3px #000;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --secondary-color: #1a202c;
+    --text-color: #e2e8f0;
+    --text-muted: #a0aec0;
+    --text-light: #cbd5e0;
+    --border-color: #4a5568;
+    --background-white: #2d3748;
+    --background-light: #4a5568;
+    --background-hover: #553c9a;
+  }
+}
+
+/* ============================== 
+   UTILITY CLASSES
+   ============================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Enhanced loading states with better animation */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--primary-color);
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+  will-change: transform;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Added skeleton loading for better UX */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Added print styles */
+@media print {
+  .create-release-container {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+
+  .actions,
+  .ql-toolbar {
+    display: none;
+  }
+
+  ::ng-deep .mat-step-header {
+    break-inside: avoid;
+  }
+}

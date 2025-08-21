@@ -1,17 +1,33 @@
-  import { Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
-  export const routes: Routes = [
+export const routes: Routes = [
   {
-      path: 'auth/login',
-      loadComponent: () => import('./features/auth/pages/login/login').then(m => m.LoginComponent),
-       pathMatch: 'full'
-    },
-    {
-      path :'auth/callback',
-      loadComponent: () => import('./features/auth/pages/login-callback.page').then(m =>m.LoginCallbackPage)
-    },
-    {
-      path :'dashboard',
-      loadComponent: () => import('./features/dashboard/dashboard').then(m =>m.Dashboard)
-    }
-  ];
+    path: '',
+    redirectTo: 'dashobard',
+    pathMatch: 'full'
+  },
+  {
+    path: 'release-history',
+    loadComponent: () => import('./features/release-history/release-history').then(m => m.ReleaseHistoryComponent)
+  },
+  {
+    path: 'release-details/:id',
+    loadComponent: () => import('./features/release-details/release-details').then(m => m.ReleaseDetailsComponent)
+  },
+  {
+    path: '',
+    loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard)
+  },
+  {
+    path: 'projects/:id',
+    loadComponent: () => import('./features/project-details/project-details').then(m => m.ProjectDetails)
+  },
+  {
+    path: 'projects/:id/modules',
+    loadComponent: () => import('./features/project-modules/project-modules').then(m => m.ProjectModules)
+  },
+  {
+    path: 'create-release',
+    loadComponent: () => import('./features/create-release/create-release').then(m => m.CreateReleaseComponent)
+  }
+];

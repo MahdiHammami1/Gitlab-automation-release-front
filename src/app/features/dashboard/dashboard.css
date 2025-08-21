@@ -5,9 +5,9 @@
 
 /* Page shell */
 .page {
-  font-family: var(--gl-font);
-  color: var(--gl-text);
-  background: var(--gl-bg);
+  font-family: var(--font-family);
+  color: var(--text-color);
+  background: var(--bg-color);
   padding: var(--sp-7) var(--sp-7) var(--sp-8);
   max-width: 1200px;
   margin: 0 auto;
@@ -27,14 +27,14 @@
 .page-header {
   position: sticky;
   top: 0;
-  background: var(--gl-bg);
+  background: var(--bg-color);
   z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-6);
   padding: var(--sp-6) 0 var(--sp-5);
-  border-bottom: 1px solid var(--gl-border);
+  border-bottom: 1px solid var(--border-color);
   backdrop-filter: saturate(1.2) blur(2px);
 }
 
@@ -45,7 +45,7 @@
 }
 
 .page-header .title svg path {
-  fill: var(--gl-orange-500);
+  fill: var(--primary-color);
 }
 
 .page-header h1 {
@@ -64,15 +64,15 @@
 /* Buttons */
 .btn {
   appearance: none;
-  border: 1px solid var(--gl-border);
-  background: linear-gradient(0deg, rgba(255,255,255,0.0), rgba(255,255,255,0.0)), var(--gl-bg);
+  border: 1px solid var(--border-color);
+  background: var(--bg-color);
   padding: 8px 12px;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   font-size: var(--fs-1);
   font-weight: 600;
-  color: var(--gl-purple-500);
+  color: var(--primary-dark);
   transition: transform .06s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
-  box-shadow: var(--gl-shadow-1);
+  box-shadow: var(--shadow-light);
 }
 .btn:hover {
   border-color: #d7d2e6;
@@ -82,7 +82,7 @@
   transform: translateY(0);
 }
 .btn.primary {
-  background: linear-gradient(180deg, var(--gl-orange-400), var(--gl-orange-500));
+  background: linear-gradient(180deg, var(--primary-color), var(--primary-dark));
   color: white;
   border-color: transparent;
 }
@@ -92,8 +92,8 @@
 .view-switch {
   display: inline-flex;
   padding: 4px;
-  background: var(--gl-bg-subtle);
-  border: 1px solid var(--gl-border);
+  background: var(--secondary-color);
+  border: 1px solid var(--border-color);
   border-radius: 999px;
   gap: 2px;
 }
@@ -104,12 +104,12 @@
   border-radius: 999px;
   font-weight: 600;
   font-size: var(--fs-1);
-  color: var(--gl-muted);
+  color: var(--text-light);
   cursor: pointer;
 }
 .view-switch .tab.active {
   background: #fff;
-  color: var(--gl-purple-500);
+  color: var(--primary-color);
   box-shadow: 0 1px 0 rgba(23,19,33,0.04), 0 4px 10px rgba(23,19,33,0.06);
 }
 

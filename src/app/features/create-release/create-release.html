@@ -1,0 +1,56 @@
+
+<div class="create-release-container">
+  <mat-horizontal-stepper [selectedIndex]="step()" class="release-stepper">
+    <mat-step [stepControl]="depotsFormArray" class="release-step">
+      <ng-template matStepLabel>Informations générales</ng-template>
+      <div class="create-release-form">
+        <mat-form-field appearance="fill" class="release-input">
+          <mat-label>Nom du release</mat-label>
+          <input matInput [(ngModel)]="releaseName">
+        </mat-form-field>
+
+        <div *ngIf="chargementProjets()" class="loading">Chargement des dépôts…</div>
+        <div *ngIf="!chargementProjets()" class="repo-list">
+          <div class="repo-select-block" *ngFor="let p of projets(); let i = index">
+            <div class="repo-title">{{ p.name }} ({{ p.namespace.full_path }})</div>
+            <mat-checkbox [formControl]="depotsFormArray.at(i)" class="repo-checkbox">Sélectionner</mat-checkbox>
+            <div *ngIf="chargementTags()[p.id]" class="loading">Chargement des tags…</div>
+            <div *ngIf="!chargementTags()[p.id]" class="tag-select">
+              <mat-form-field appearance="fill">
+                <mat-label>Tag pour ce dépôt</mat-label>
+                <select matNativeControl [(ngModel)]="tagsSelectionnes()[p.id]">
+                  <option *ngFor="let tag of tagsParProjet()[p.id]" [value]="tag.name">{{ tag.name }}</option>
+                </select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button mat-raised-button color="primary" class="btn-next" (click)="step.set(1)">Suivant</button>
+        </div>
+      </div>
+    </mat-step>
+    <mat-step class="release-step">
+  <ng-template matStepLabel>Description</ng-template>
+  <div class="create-release-form">
+    <div class="quill-label-wrapper">
+      <label class="quill-label">Changelog</label>
+    </div>
+    <div class="quill-block quill-block-centered">
+      <quill-editor
+        [modules]="quillModules"
+        [style]="{height: '200px'}"
+        [placeholder]="'Décrivez les changements, nouveautés, corrections...'"
+        [(ngModel)]="description"
+        class="quill-editor"
+      ></quill-editor>
+    </div>
+    <div class="actions">
+      <button mat-raised-button color="primary" class="btn-submit" (click)="onSoumettre()">
+         Créer le release
+      </button>
+    </div>
+  </div>
+</mat-step>
+  </mat-horizontal-stepper>
+</div>

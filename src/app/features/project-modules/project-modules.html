@@ -1,0 +1,28 @@
+<div class="modules-page">
+  <h2>Modules du projet</h2>
+  <div *ngIf="loading()">Chargement…</div>
+  <div *ngIf="error()">{{ error() }}</div>
+  <table *ngIf="!loading() && !error()">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Chemin</th>
+        <th>Dernier tag</th>
+        <th>Dernier commit</th>
+        <th>Modification non taggée ?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of modules()">
+        <td>{{ m.name }}</td>
+        <td>{{ m.path }}</td>
+        <td>{{ m.lastTag || '—' }}</td>
+        <td>{{ m.lastCommit?.title || '—' }}</td>
+        <td>
+          <span *ngIf="m.untagged; else tagged">Oui</span>
+          <ng-template #tagged>Non</ng-template>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

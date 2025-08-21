@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { GitlabService } from '../../services/gitlab.service';
@@ -8,7 +9,7 @@ import { Project, Visibility } from '../../models/gitlab-project.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, RouterModule, FormsModule, HttpClientModule],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
@@ -20,6 +21,9 @@ export class Dashboard implements OnInit {
 
   projects = signal<Project[]>([]);
   filtered = signal<Project[]>([]);
+
+  // Map project id to last tag name
+  lastTags = signal<Record<number | string, string | null>>({});
 
   // UI state
   query = signal('');
@@ -40,6 +44,21 @@ export class Dashboard implements OnInit {
       next: (rows) => {
         this.projects.set(rows);
         this.applyFilters();
+        // fetch last tag per project
+        rows.forEach(p => {
+          this.api.getTags(p.id, 1).subscribe({
+            next: (tags) => {
+              const map = { ...this.lastTags() };
+              map[p.id] = tags && tags.length ? tags[0].name : null;
+              this.lastTags.set(map);
+            },
+            error: () => {
+              const map = { ...this.lastTags() };
+              map[p.id] = null;
+              this.lastTags.set(map);
+            }
+          });
+        });
         this.loading.set(false);
       },
       error: () => {
