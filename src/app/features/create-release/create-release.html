@@ -23,6 +23,26 @@
                 </select>
               </mat-form-field>
             </div>
+
+            <!-- Commits pour ce dépôt, affichés si sélectionné -->
+            <ng-container *ngIf="depotsFormArray.at(i).value">
+              <div style="margin-top:1rem;">
+                <div *ngIf="chargementCommits()[p.id]" class="loading">Chargement des commits…</div>
+                <div *ngIf="!chargementCommits()[p.id]">
+                  <ng-container *ngIf="commitsParProjet()[p.id]?.length; else noCommitsFirstStep">
+                    <h4 style="margin-top:0.5rem;">Commits pour {{ p.name }} :</h4>
+                    <ul>
+                      <li *ngFor="let commit of commitsParProjet()[p.id]">
+                        <strong>{{ commit.short_id }}</strong> - {{ commit.title }} <span style="color: #888;">({{ commit.author_name }})</span>
+                      </li>
+                    </ul>
+                  </ng-container>
+                  <ng-template #noCommitsFirstStep>
+                    <div style="color:#888; margin-bottom:1rem;">Aucun commit trouvé pour {{ p.name }}.</div>
+                  </ng-template>
+                </div>
+              </div>
+            </ng-container>
           </div>
         </div>
         <div class="actions">
@@ -33,6 +53,26 @@
     <mat-step class="release-step">
   <ng-template matStepLabel>Description</ng-template>
   <div class="create-release-form">
+    <!-- Commits de chaque dépôt sélectionné, juste avant le changelog -->
+    <ng-container *ngIf="projetsSelectionnes()?.length">
+      <h3 style="margin-top:2rem;">Commits par dépôt sélectionné</h3>
+      <div *ngFor="let projetId of projetsSelectionnes()" style="margin-bottom:1.5rem;">
+        <div style="font-weight:600; margin-bottom:0.3rem;">{{ getProjetNameById(projetId) }}</div>
+        <div *ngIf="chargementCommits()[projetId]" class="loading">Chargement des commits…</div>
+        <div *ngIf="!chargementCommits()[projetId]">
+          <ng-container *ngIf="commitsParProjet()[projetId]?.length; else noCommits">
+            <ul>
+              <li *ngFor="let commit of commitsParProjet()[projetId]">
+                <strong>{{ commit.short_id }}</strong> - {{ commit.title }} <span style="color: #888;">({{ commit.author_name }})</span>
+              </li>
+            </ul>
+          </ng-container>
+          <ng-template #noCommits>
+            <div style="color:#888; margin-bottom:1rem;">Aucun commit trouvé pour {{ getProjetNameById(projetId) }}.</div>
+          </ng-template>
+        </div>
+      </div>
+    </ng-container>
     <div class="quill-label-wrapper">
       <label class="quill-label">Changelog</label>
     </div>

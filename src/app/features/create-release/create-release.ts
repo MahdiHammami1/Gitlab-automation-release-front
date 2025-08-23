@@ -32,6 +32,11 @@ import { AuthService } from '../../core/services/auth';
   styleUrls: ['./create-release.css']
 })
 export class CreateReleaseComponent {
+  /** Retourne le nom du projet à partir de son id */
+  getProjetNameById(id: number): string {
+    const projet = this.projets().find((p: any) => p.id === id);
+    return projet ? projet.name : '';
+  }
   releaseName = '';
   description: string = '';   // ✅ une seule fois
 
@@ -45,6 +50,10 @@ export class CreateReleaseComponent {
   tagsParProjet = signal<Record<number, any[]>>({});
   tagsSelectionnes = signal<Record<number, string>>({});
   chargementTags = signal<Record<number, boolean>>({});
+
+  // Commits
+  commitsParProjet = signal<Record<number, any[]>>({});
+  chargementCommits = signal<Record<number, boolean>>({});
 
   // Quill
   quillModules = {
@@ -78,8 +87,14 @@ export class CreateReleaseComponent {
           const ctrl = this.fb.control<boolean>(false, { nonNullable: true });
 
           ctrl.valueChanges.subscribe((checked) => {
-            if (checked && !this.tagsParProjet()[p.id]) {
-              this.chargerTagsPourProjet(p.id);
+            if (checked) {
+              if (!this.tagsParProjet()[p.id]) {
+                this.chargerTagsPourProjet(p.id);
+              }
+              this.chargerCommitsPourProjet(p.id);
+            } else {
+              // Si décoché, on peut vider les commits affichés
+              this.commitsParProjet.set({ ...this.commitsParProjet(), [p.id]: [] });
             }
           });
 
@@ -106,6 +121,74 @@ export class CreateReleaseComponent {
     });
   }
 
+  /** Charger tous les commits pour chaque projet sélectionné, mais n'afficher que ceux après la date du dernier release (release.created_at) */
+  chargerCommitsPourProjet(id: number) {
+    this.chargementCommits.set({ ...this.chargementCommits(), [id]: true });
+    this.api.getAllCommits(id).subscribe({
+      next: (commits) => {
+        // 2. Récupérer les releases pour ce projet
+    (this.api as any).http.get(`http://localhost:3000/gitlab/projects/${id}/releases`).subscribe({
+          next: (releases: any[]) => {
+            let lastReleaseDate: Date | null = null;
+            if (releases && releases.length) {
+              // On prend la date de création du dernier release
+              lastReleaseDate = new Date(releases[0].created_at);
+            }
+            // Fallback sur le tag si aucun release n'existe
+            if (!lastReleaseDate) {
+              this.api.getTags(id, 1).subscribe({
+                next: (tags) => {
+                  if (tags && tags.length && tags[0].commit && tags[0].commit.created_at) {
+                    lastReleaseDate = new Date(tags[0].commit.created_at);
+                  }
+                  let filteredCommits = commits;
+                  if (lastReleaseDate !== null) {
+                    filteredCommits = commits.filter((c: any) => new Date(c.created_at) > (lastReleaseDate as Date));
+                  }
+                  this.commitsParProjet.set({ ...this.commitsParProjet(), [id]: filteredCommits });
+                  this.chargementCommits.set({ ...this.chargementCommits(), [id]: false });
+                },
+                error: () => {
+                  this.commitsParProjet.set({ ...this.commitsParProjet(), [id]: commits });
+                  this.chargementCommits.set({ ...this.chargementCommits(), [id]: false });
+                }
+              });
+            } else {
+              let filteredCommits = commits;
+              if (lastReleaseDate !== null) {
+                filteredCommits = commits.filter((c: any) => new Date(c.created_at) > (lastReleaseDate as Date));
+              }
+              this.commitsParProjet.set({ ...this.commitsParProjet(), [id]: filteredCommits });
+              this.chargementCommits.set({ ...this.chargementCommits(), [id]: false });
+            }
+          },
+          error: () => {
+            // Si erreur releases, fallback sur tags puis tous les commits
+            this.api.getTags(id, 1).subscribe({
+              next: (tags) => {
+                let lastReleaseDate: Date | null = null;
+                if (tags && tags.length && tags[0].commit && tags[0].commit.created_at) {
+                  lastReleaseDate = new Date(tags[0].commit.created_at);
+                }
+                let filteredCommits = commits;
+                if (lastReleaseDate !== null) {
+                  filteredCommits = commits.filter((c: any) => new Date(c.created_at) > (lastReleaseDate as Date));
+                }
+                this.commitsParProjet.set({ ...this.commitsParProjet(), [id]: filteredCommits });
+                this.chargementCommits.set({ ...this.chargementCommits(), [id]: false });
+              },
+              error: () => {
+                this.commitsParProjet.set({ ...this.commitsParProjet(), [id]: commits });
+                this.chargementCommits.set({ ...this.chargementCommits(), [id]: false });
+              }
+            });
+          }
+        });
+      },
+      error: () => this.chargementCommits.set({ ...this.chargementCommits(), [id]: false })
+    });
+  }
+
   /** Étape suivante */
   onDepotsStepNext() {
     const selected = this.depotsFormArray.controls
@@ -116,10 +199,11 @@ export class CreateReleaseComponent {
     this.onSelectionDepotsChange();
   }
 
-  /** Charger les tags des dépôts sélectionnés */
+  /** Charger les tags et commits des dépôts sélectionnés */
   private onSelectionDepotsChange() {
     this.projetsSelectionnes().forEach((id) => {
       if (!this.tagsParProjet()[id]) this.chargerTagsPourProjet(id);
+      this.chargerCommitsPourProjet(id);
     });
   }
 

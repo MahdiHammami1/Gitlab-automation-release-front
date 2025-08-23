@@ -12,12 +12,12 @@ import {
   MatRippleModule
 } from "./chunk-DYD7U2DT.js";
 import {
+  ControlContainer
+} from "./chunk-WYRS6SFZ.js";
+import {
   MatRipple,
   _StructuralStylesLoader
 } from "./chunk-XEXSCVQY.js";
-import {
-  ControlContainer
-} from "./chunk-WYRS6SFZ.js";
 import {
   _animationsDisabled
 } from "./chunk-J2CJLCKL.js";

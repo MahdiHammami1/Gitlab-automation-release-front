@@ -2,43 +2,7 @@
 /* attach tokens to the component tree instead of the doc root */
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 :root {
-  /* Palette principale (GitLab violet, cohérent avec le front actuel) */
-  --primary-color: #7a5af5;
-  --primary-dark: #5c3cc5;
-  --secondary-color: #f5f7fb;
-  --bg-color: #fff;
-  --text-color: #333;
-  --text-light: #666;
-  --border-color: #e0e0e0;
-  --border-radius: 12px;
-  --transition-speed: 0.3s;
-  --shadow-light: 0 4px 8px rgba(0,0,0,0.05);
-  --shadow-heavy: 0 6px 16px rgba(0,0,0,0.15);
-
-  /* Fontes et tailles */
-  --font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-  --fs-0: 12px;
-  --fs-1: 14px;
-  --fs-2: 16px;
-  --fs-3: 18px;
-  --fs-4: 20px;
-
-  /* Spacing */
-  --sp-0: 0;
-  --sp-1: 4px;
-  --sp-2: 8px;
-  --sp-3: 12px;
-  --sp-4: 16px;
-  --sp-5: 20px;
-  --sp-6: 24px;
-  --sp-7: 32px;
-  --sp-8: 40px;
-}
-
-
-
-:root {
-  /* Colors */
+  /* Palette principale */
   --primary-color: #7a5af5;
   --primary-dark: #5c3cc5;
   --primary-light: rgba(122, 90, 245, 0.1);
@@ -53,13 +17,6 @@
   --background-light: #fafafa;
   --background-hover: #fdfbff;
 
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-
   /* Typography */
   --font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-size-sm: 0.875rem;
@@ -71,6 +28,13 @@
   --font-weight-bold: 700;
   --line-height-base: 1.6;
   --line-height-relaxed: 1.7;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
 
   /* Layout */
   --border-radius: 8px;
@@ -89,3 +53,6 @@
   --transition-base: 0.2s ease;
   --transition-slow: 0.3s ease;
 }
+
+
+

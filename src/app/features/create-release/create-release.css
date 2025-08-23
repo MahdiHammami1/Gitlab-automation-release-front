@@ -1,3 +1,11 @@
+
+.mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__checkmark {
+  color: #fff !important;
+}
+
+.mat-mdc-checkbox .mdc-checkbox__background {
+  transition: background-color 0.2s, border-color 0.2s;
+}
 /* ============================== 
    CSS CUSTOM PROPERTIES (VARIABLES)
    ============================== */
@@ -129,6 +137,17 @@ body {
     outline-offset: var(--focus-ring-offset);
     box-shadow: var(--focus-ring);
   }
+}
+
+/* Change color when repo is selected (checked) */
+.repo-select-block.selected {
+  background: #e3f0ff;
+  border-color: #1976d2;
+}
+
+.repo-checkbox:checked {
+  accent-color: #1976d2;
+  box-shadow: 0 0 0 2px #1976d2;
 }
 
 .repo-select-block:hover {

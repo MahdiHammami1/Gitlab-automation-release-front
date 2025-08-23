@@ -16,6 +16,7 @@ export class ProjectDetails {
   branches = signal<any[]>([]);
   tags = signal<any[]>([]);
   releases = signal<any[]>([]);
+  branchReleases = signal<any[]>([]);
   pipelines = signal<any[]>([]);
 
   constructor(private route: ActivatedRoute) {
@@ -41,15 +42,40 @@ export class ProjectDetails {
       .then(res => res.json())
       .then(data => this.branches.set(data));
   }
+
+  fetchBranchReleases(branchName: string) {
+    fetch(`http://localhost:3000/gitlab/projects/${this.projectId()}/repository/branches/${branchName}/releases`)
+      .then(res => res.json())
+      .then(data => this.branchReleases.set(data));
+  }
   fetchTags() {
     fetch(`http://localhost:3000/gitlab/projects/${this.projectId()}/repository/tags?per_page=2`)
       .then(res => res.json())
       .then(data => this.tags.set(data));
   }
-  fetchReleases() {
-    fetch(`http://localhost:3000/gitlab/projects/${this.projectId()}/releases?per_page=2`)
+  fetchReleases(projectId?: string) {
+    const id = projectId || this.projectId();
+    fetch(`http://localhost:3000/gitlab/projects/${id}/releases`)
       .then(res => res.json())
       .then(data => this.releases.set(data));
+  }
+
+  fetchAllBranchReleases() {
+    const branches = this.branches();
+    if (!branches.length) return;
+    const allBranchReleases: any[] = [];
+    let completed = 0;
+    branches.forEach(branch => {
+      fetch(`http://localhost:3000/gitlab/projects/${this.projectId()}/repository/branches/${branch.name}/releases`)
+        .then(res => res.json())
+        .then(data => {
+          allBranchReleases.push({ branch: branch.name, releases: data });
+          completed++;
+          if (completed === branches.length) {
+            this.branchReleases.set(allBranchReleases);
+          }
+        });
+    });
   }
   fetchPipelines() {
     fetch(`http://localhost:3000/gitlab/projects/${this.projectId()}/pipelines?per_page=2`)

@@ -1,3 +1,4 @@
+ 
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
@@ -73,7 +74,7 @@ export class GitlabService {
       );
   }
 
-   getMe(): Observable<GitLabMe> {
+  getMe(): Observable<GitLabMe> {
     let headers = new HttpHeaders();
     const token = localStorage.getItem('accessToken');
     if (token) headers = headers.set('Authorization', `Bearer ${token}`);
@@ -81,8 +82,17 @@ export class GitlabService {
       headers,
       withCredentials: true,
     });
-   }
+  }
 
+  /** Récupère tous les commits pour un projet */
+  getAllCommits(projectId: string | number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/gitlab/projects/${projectId}/commits`).pipe(
+      catchError((err) => {
+        console.error('Failed to load all commits for project', projectId, err);
+        return throwError(() => new Error('Unable to load all commits'));
+      })
+    );
+  }
    // Fetch repository tags for a given project. By default returns only the most recent tag (per_page=1).
     getTags(projectId: string | number, per_page: number = 1): Observable<any[]> {
     return this.http
@@ -113,5 +123,14 @@ export class GitlabService {
   /** Crée le release global */
   createRelease(data: any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/releases`, data);
+  }
+  /** Récupère les commits depuis le dernier release pour un projet */
+  getCommitsSinceLastRelease(projectId: string | number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/gitlab/projects/${projectId}/commits/since-last-release`).pipe(
+      catchError((err) => {
+        console.error('Failed to load commits for project', projectId, err);
+        return throwError(() => new Error('Unable to load commits'));
+      })
+    );
   }
 }

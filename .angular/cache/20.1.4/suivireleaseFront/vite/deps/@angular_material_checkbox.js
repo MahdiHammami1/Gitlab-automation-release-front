@@ -1,11 +1,11 @@
 import {
-  MatRipple,
-  _StructuralStylesLoader
-} from "./chunk-XEXSCVQY.js";
-import {
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR
 } from "./chunk-WYRS6SFZ.js";
+import {
+  MatRipple,
+  _StructuralStylesLoader
+} from "./chunk-XEXSCVQY.js";
 import {
   _animationsDisabled
 } from "./chunk-J2CJLCKL.js";
