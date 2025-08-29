@@ -1,0 +1,134 @@
+<div class="auto-release-container">
+  <h2>Création automatique d'un release</h2>
+
+  <!-- Stepper visuel -->
+  <div class="stepper" style="display:flex;justify-content:center;align-items:center;margin-bottom:2.2rem;gap:18px;">
+    <ng-container *ngFor="let s of [1,2,3,4]; let i = index">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div [ngClass]="{'step-circle':true, 'active': step()===s, 'done': step()>s}" >
+          <span *ngIf="step()>s">&#10003;</span>
+          <span *ngIf="step()<=s">{{s}}</span>
+        </div>
+        <span style="font-size:.98em;color:var(--text-muted);min-width:110px;">
+          <ng-container [ngSwitch]="s">
+            <span *ngSwitchCase="1">Informations</span>
+            <span *ngSwitchCase="2">Sélection des tags</span>
+            <span *ngSwitchCase="3">Édition du changelog</span>
+            <span *ngSwitchCase="4">Téléchargements</span>
+          </ng-container>
+        </span>
+      </div>
+      <div *ngIf="i<3" style="height:2px;width:32px;background:var(--border-color);"></div>
+    </ng-container>
+  </div>
+
+  <!-- Étapes -->
+  <ng-container [ngSwitch]="step()">
+
+    <!-- Étape 1 : Informations -->
+    <div *ngSwitchCase="1">
+      <h3>Informations générales</h3>
+      <input [(ngModel)]="releaseName" placeholder="Nom du release" />
+      <div class="actions">
+        <button class="btn" (click)="step.set(2)">Suivant</button>
+      </div>
+    </div>
+
+    <!-- Étape 2 : Sélection des tags/repos -->
+    <div *ngSwitchCase="2">
+      <h3>Sélection des tags à inclure</h3>
+      <div *ngIf="chargement()">Chargement…</div>
+      <div *ngIf="!chargement()">
+        <div *ngFor="let projet of projets()">
+          <div><b>{{ projet.name }}</b></div>
+          <ng-container *ngIf="hasFilteredTags(projet.id); else noTags">
+            <ul>
+              <li *ngFor="let tag of tagsParProjet()[projet.id]">
+                <label>
+                  <input type="checkbox"
+                         [checked]="isTagSelected(projet.id, tag.name)"
+                         (change)="onTagToggle(projet.id, tag, $event.target.checked)">
+                  {{ tag.name }}
+                </label>
+              </li>
+            </ul>
+          </ng-container>
+          <ng-template #noTags>
+            <div class="empty-note">Aucun tag disponible après le dernier release.</div>
+          </ng-template>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-secondary" (click)="step.set(1)">Précédent</button>
+        <button class="btn" (click)="onEnterChangelogStep(); step.set(3)">Suivant</button>
+      </div>
+    </div>
+
+    <!-- Étape 3 : Changelog -->
+    <div *ngSwitchCase="3">
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <h3 style="text-align: center; width: 100%;">Éditez le changelog du release</h3>
+        <div style="margin-bottom:1.5em; display: flex; justify-content: center; width: 100%;">
+          <div style="width: 100%; max-width: 600px;">
+            <quill-editor
+              [modules]="quillModules"
+              [(ngModel)]="changelogContent"
+              [style]="{height: '220px'}"
+              placeholder="Décrivez les changements, nouveautés, corrections..."
+              class="quill-editor"
+            ></quill-editor>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-secondary" (click)="step.set(2)">Précédent</button>
+        <button class="btn" (click)="chargerCommitsPourTagsSelectionnes(); step.set(4)">Suivant</button>
+      </div>
+    </div>
+
+    <!-- Étape 4 : Téléchargements -->
+    <div *ngSwitchCase="4">
+      <h3>Téléchargements des archives de tags</h3>
+      <div *ngFor="let sel of tagsSelectionnes()">
+        <div style="margin-top: 1.5em;">
+          <b>{{ getProjetNameById(sel.repoId) }}</b> — <span class="tag">{{ sel.tag.name }}</span>
+          <div>
+            <a [href]="getDownloadUrl(sel.repoId, sel.tag.name)" target="_blank" class="btn">Télécharger ZIP</a>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-secondary" (click)="step.set(3)">Précédent</button>
+        <button class="btn" (click)="onCreateRelease()">Créer le release</button>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<!-- Stepper styles -->
+<style>
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--background-light, #f5f7fb);
+  border: 2px solid var(--border-color, #e5e7eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.1em;
+  color: var(--primary-color, #7a5af5);
+  transition: border-color .2s, background .2s;
+}
+.step-circle.active {
+  border-color: var(--primary-color, #7a5af5);
+  background: var(--primary-light, #ede9fe);
+  color: var(--primary-dark, #5c3cc5);
+}
+.step-circle.done {
+  border-color: var(--success-color, #22c55e);
+  background: var(--success-color, #22c55e);
+  color: #fff;
+}
+</style>

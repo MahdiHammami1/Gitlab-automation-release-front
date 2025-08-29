@@ -38,9 +38,22 @@ export class ProjectDetails {
       .then(data => this.project.set(data));
   }
   fetchBranches() {
-    fetch(`http://localhost:3000/gitlab/projects/${this.projectId()}/repository/branches?per_page=2`)
+    fetch(`http://localhost:3000/gitlab/projects/${this.projectId()}/repository/branches?per_page=20`)
       .then(res => res.json())
-      .then(data => this.branches.set(data));
+      .then(data => {
+        this.branches.set(data);
+        // Charger les commits de la branche par défaut
+        const defaultBranch = this.project()?.default_branch || (data[0] && data[0].name);
+        if (defaultBranch) {
+          fetch(`http://localhost:3000/gitlab/projects/${this.projectId()}/repository/commits?ref_name=${defaultBranch}&per_page=10`)
+            .then(res => res.json())
+            .then(commits => {
+              // Injecter les commits dans la branche par défaut
+              const updated = data.map((b: any) => b.name === defaultBranch ? { ...b, commits } : b);
+              this.branches.set(updated);
+            });
+        }
+      });
   }
 
   fetchBranchReleases(branchName: string) {

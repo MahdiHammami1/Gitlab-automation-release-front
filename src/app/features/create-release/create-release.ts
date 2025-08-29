@@ -1,5 +1,8 @@
 import { Component, signal } from '@angular/core';
+import TurndownService from 'turndown';
 import { QuillModule } from 'ngx-quill';
+import Quill from 'quill';
+import Table from 'quill-table-ui';
 import { CommonModule } from '@angular/common';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +14,11 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormArray, FormControl }
 import { RouterModule } from '@angular/router';
 import { GitlabService } from '../../services/gitlab.service';
 import { AuthService } from '../../core/services/auth';
+
+// Enregistrement du module table si ce n'est pas déjà fait
+if ((Quill as any).register && !(Quill as any).imports['modules/table']) {
+  Quill.register({ 'modules/table': Table }, true);
+}
 
 @Component({
   selector: 'app-create-release',
@@ -63,8 +71,10 @@ export class CreateReleaseComponent {
       [{ list: 'ordered' }, { list: 'bullet' }],
       [{ indent: '-1' }, { indent: '+1' }],
       ['link', 'image'],
+      ['table'], // Ajout du bouton table
       ['clean']
-    ]
+    ],
+    table: true // Activation du module table
   };
 
   // Stepper
@@ -238,11 +248,14 @@ export class CreateReleaseComponent {
       authorName = meRes?.name || meRes?.username || authorName;
     } catch {}
 
+    // Utiliser le HTML Quill directement pour garder la mise en forme
+    const html = this.description;
+
     const releaseData = {
       name: this.releaseName,
-      description: this.description,  // ✅ string
+      description: html,  // HTML riche
       author: authorName,
-      changelogGlobal: this.description,
+      changelogGlobal: html,
       moduleReleases
     };
 
@@ -252,6 +265,44 @@ export class CreateReleaseComponent {
     } catch (err) {
       console.error('Erreur lors de la création du release:', err);
       alert('❌ Erreur lors de la création du release.');
+    }
+  }
+
+  /** Vérifie et effectue une fusion si nécessaire via le bouton 'Créer sur main' */
+  async onCreerSurMain(): Promise<void> {
+    const depots = this.projets().filter((_, i) => this.depotsFormArray.at(i).value);
+
+    for (const depot of depots) {
+      const projectId = depot.id;
+      const branchName = this.tagsSelectionnes()[projectId];
+
+      try {
+        const branches = await this.api.getBranches(projectId).toPromise();
+
+        if (!branches) {
+          alert(`❌ Impossible de récupérer les branches pour le projet ${depot.name}`);
+          continue;
+        }
+
+        const mainBranch = branches.find((b: any) => b.name === 'main');
+
+        if (!mainBranch) {
+          alert(`❌ La branche principale 'main' est introuvable pour le projet ${depot.name}`);
+          continue;
+        }
+
+        const mergeRequestExists = branches.some((b: any) => b.name === branchName && b.merge_request); // Vérifie si une MR existe
+
+        if (mergeRequestExists) {
+          await this.api.updateMainFromBranch(projectId, branchName).toPromise();
+          alert(`✅ Fusion effectuée avec succès pour le projet ${depot.name}`);
+        } else {
+          alert(`❌ Aucun changement à fusionner pour le projet ${depot.name}`);
+        }
+      } catch (err) {
+        console.error(`Erreur lors de la vérification ou de la fusion pour le projet ${depot.name}:`, err);
+        alert(`❌ Erreur lors de la vérification ou de la fusion pour le projet ${depot.name}`);
+      }
     }
   }
 }

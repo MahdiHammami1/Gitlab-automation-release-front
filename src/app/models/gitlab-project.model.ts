@@ -29,4 +29,7 @@ export interface Project {
   web_url: string;
   avatar_url?: string | null;
   namespace: Namespace;
+  // Ajout pour dashboard: tags présents sur branche mais pas sur main
+  _branchTagDiff?: string[];
+  _lastTag?: string; // Added to store the last tag
 }

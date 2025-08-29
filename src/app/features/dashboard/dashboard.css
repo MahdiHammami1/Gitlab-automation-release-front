@@ -281,6 +281,8 @@ button.mini:hover { border-color: #d7d2e6; transform: translateY(-1px); }
   font-size: 12px;
   color: #4c4761;
 }
+.warn { color: #c2410c; font-weight:700; }
+.ok { color: #127a3a; font-weight:800; background: rgba(18,122,58,0.06); padding: 4px 8px; border-radius: 6px; }
 
 /* Cards */
 .cards {

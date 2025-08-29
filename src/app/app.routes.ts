@@ -11,6 +11,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/release-history/release-history').then(m => m.ReleaseHistoryComponent)
   },
   {
+    path: 'auto-release',
+    loadComponent: () => import('./features/auto-release/auto-release').then(m => m.AutoReleaseComponent)
+  },
+  {
     path: 'release-details/:id',
     loadComponent: () => import('./features/release-details/release-details').then(m => m.ReleaseDetailsComponent)
   },

@@ -2,9 +2,16 @@
   <img [src]="project().avatar_url" class="project-logo" *ngIf="project().avatar_url">
   <div class="project-info">
     <h2>{{ project().name_with_namespace }}</h2>
-    <div>ID du projet : {{ project().id }} | Visibilité : {{ project().visibility }}</div>
-    <div>Branche par défaut : {{ project().default_branch }}</div>
-    <div>Dernière activité : {{ project().last_activity_at | date:'yyyy-MM-dd' }}</div>
+    <div class="project-desc" *ngIf="project().description">{{ project().description }}</div>
+    <div>ID du projet : {{ project().id }} | Namespace : {{ project().namespace?.full_path || project().namespace?.name }}</div>
+    <div>Visibilité : {{ project().visibility }} | Branche par défaut : {{ project().default_branch }}</div>
+    <div>Créé le : {{ project().created_at | date:'dd/MM/yyyy' }} | Dernière activité : {{ project().last_activity_at | date:'dd/MM/yyyy' }}</div>
+    <div>
+      ⭐ Stars : {{ project().star_count }}
+      | 🍴 Forks : {{ project().forks_count }}
+      | 🐞 Issues : {{ project().open_issues_count }}
+      | 🔀 MRs : {{ project().open_merge_requests_count || '—' }}
+    </div>
     <a [href]="project().web_url" target="_blank">Voir sur GitLab</a>
   </div>
 </div>
@@ -24,7 +31,29 @@
       <li *ngFor="let tag of tags()">
         • {{ tag.name }} (commit du {{ tag.commit?.committed_date | date:'dd/MM/yyyy' }})
       </li>
+      <li *ngIf="!tags().length" style="color:#aaa;">Aucun tag trouvé.</li>
     </ul>
   </section>
-  <!-- Sections Releases, Pipelines et Actions rapides supprimées -->
+
+  <section>
+    <h3>Releases</h3>
+    <ul>
+      <li *ngFor="let release of releases()">
+        <strong>{{ release.name }}</strong> <span *ngIf="release.tag_name">({{ release.tag_name }})</span>
+        <div style="font-size:0.97em; color:#888;">{{ release.created_at | date:'dd/MM/yyyy HH:mm' }} - par {{ release.author?.name || release.author_name || '—' }}</div>
+        <div *ngIf="release.description" style="margin-top:2px; color:#555; font-size:0.98em;">{{ release.description }}</div>
+      </li>
+      <li *ngIf="!releases().length" style="color:#aaa;">Aucune release trouvée.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Commits (branche par défaut)</h3>
+    <ul>
+      <li *ngFor="let commit of branches()?.[0]?.commits">
+        <strong>{{ commit.short_id }}</strong> - {{ commit.title }} <span style="color: #888;">({{ commit.author_name }}, {{ commit.created_at | date:'dd/MM/yyyy HH:mm' }})</span>
+      </li>
+      <li *ngIf="!branches()?.[0]?.commits?.length" style="color:#aaa;">Aucun commit trouvé.</li>
+    </ul>
+  </section>
 </div>

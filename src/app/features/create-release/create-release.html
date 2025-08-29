@@ -85,12 +85,20 @@
         class="quill-editor"
       ></quill-editor>
     </div>
-    <div class="actions">
-      <button mat-raised-button color="primary" class="btn-submit" (click)="onSoumettre()">
-         Créer le release
+
+    <div class="actions" style="justify-content:center;">
+      <button mat-raised-button color="primary" class="btn-submit modern-release-btn" (click)="onSoumettre()">
+        <span style="display:flex;align-items:center;gap:8px;">
+          <mat-icon>rocket_launch</mat-icon>
+          <span>Créer le release</span>
+        </span>
       </button>
     </div>
   </div>
-</mat-step>
+  </mat-step>
   </mat-horizontal-stepper>
 </div>
+
+<!-- Modern bouton release -->
+
+

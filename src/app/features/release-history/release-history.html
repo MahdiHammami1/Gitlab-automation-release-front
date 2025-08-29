@@ -1,5 +1,9 @@
 <div class="release-history-container">
-  <h2>Historique des releases</h2>
+  <h2 class="release-history-title">Historique des releases</h2>
+  <div style="margin-bottom: 16px;">
+    <a class="btn" [routerLink]="['/create-release']">Créer un release</a>
+    <a class="btn" style="margin-left:10px;" [routerLink]="['/auto-release']">Auto release</a>
+  </div>
   <div *ngIf="loading()" class="loading">Chargement…</div>
   <div *ngIf="error()" class="error">{{ error() }}</div>
   <div *ngIf="!loading() && !error()">

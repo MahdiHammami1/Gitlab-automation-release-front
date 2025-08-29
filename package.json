@@ -31,8 +31,11 @@
     "@angular/router": "^20.1.0",
     "ngx-quill": "^28.0.1",
     "quill": "^2.0.3",
+    "quill-better-table": "^1.2.10",
+    "quill-table-ui": "^1.0.7",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "turndown": "^7.2.1",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
