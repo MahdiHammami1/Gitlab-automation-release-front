@@ -10,12 +10,7 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'mahdi',
-                    url: 'https://github.com/MahdiHammami1/Gitlab-automation-release-front.git'
-            }
-        }
+       
 
         stage('Build Frontend') {
             steps {
